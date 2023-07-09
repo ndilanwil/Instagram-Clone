@@ -1,0 +1,49 @@
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 97vh;
+}
+.login-container {
+    flex: 1 0 auto;
+	max-width: 350px;
+	padding: 20px;
+	text-align: center;
+}
+.login-container img {
+	width: 50%;
+	margin-bottom: 20px;
+}
+.login-container input[type=text],
+.login-container input[type=email],
+.login-container input[type=password] {
+	display: block;
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+}
+.login-container button[type=submit] {
+	background-color: #3f729b;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+}
+.login-container button[type=submit]:hover {
+	background-color: #2e6283;
+}
+.forgot-password a {
+	color: #ababab;
+	text-decoration: none;
+}
+.No-Account {
+	margin-top: 12px;
+}
+.No-Account a {
+	color: #3f729b;
+	text-decoration: none;
+}
