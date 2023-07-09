@@ -6,6 +6,7 @@ import {Home} from "./pages/Home/Home"
 
 function App() {
   return (
+    <div className='app'>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -13,6 +14,7 @@ function App() {
         <Route path="/signup" element={<SignUp />}/>
       </Routes>
     </BrowserRouter>
+    </div>
   );
 }
 
