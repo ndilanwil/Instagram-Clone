@@ -1,9 +1,17 @@
+.all {
+    width: 350px;
+    
+}
+
+
 .nav {
     position: fixed;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     z-index: 1;
+    width: 280px;
+    border-right: 0.1px solid white;
+    height: 100%;
 }
 
 .nav_logo {

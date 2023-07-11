@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 export const Nav = () => {
   return (
+    <div className='all'>
     <div className='nav'>
       <img className='nav_logo' src='https://www.pngkey.com/png/full/828-8286178_mackeys-work-needs-no-elaborate-presentation-or-distracting.png' alt='instagram' />
       <div className='nav_buttons'>
@@ -56,7 +57,7 @@ export const Nav = () => {
           <span>More</span>
         </button>
       </div>
-
+    </div>
     </div>
   )
 }
