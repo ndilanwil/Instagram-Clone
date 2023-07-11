@@ -14,6 +14,10 @@ export const Timeline = () => {
         </div>
       </div>
       <div className='timeline_right'>
+      <div className="suggestions__title">Suggestions for you</div>
+        <Suggestion />
+        <Suggestion />
+        <Suggestion />
         <Suggestion />
       </div>
     </div>
