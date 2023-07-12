@@ -1,0 +1,8 @@
+.profile {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile_body {
+    flex: 0.8;
+}
