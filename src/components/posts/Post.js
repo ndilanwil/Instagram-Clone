@@ -7,20 +7,20 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline"
 import TelegramIcon from "@mui/icons-material/Telegram"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 
-export const Post = () => {
+export const Post = (props) => {
   return (
     <div className="post">
         <div className="post_header">
             <div className="post_header_author">
-                <Avatar style={{marginRight: "10px"}}>
+                <Avatar src={props.avatar} style={{marginRight: "10px"}}>
                     UN
                 </Avatar>{" "}
-                user • <span>&nbsp; timestamp</span>
+                {props.username} • <span>&nbsp; {props.time}</span>
             </div> 
             <MoreHorizIcon />
         </div>
         <div className="post_image">
-            <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt="post" />
+            <img src={props.imageUrl} alt="post" />
         </div>
         <div className="post_footer">
             <div className="post_footer_icon">
@@ -34,7 +34,10 @@ export const Post = () => {
                     <BookmarkBorderIcon className="postIcon"/>
                 </div>
             </div>
-            Like by 3 people.
+            Like by {props.likes} people.
+        </div>
+        <div className="post_comments">
+            <strong>{props.username}</strong> {props.caption}
         </div>
     </div>
   )

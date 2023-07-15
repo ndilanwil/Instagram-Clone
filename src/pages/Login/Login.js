@@ -3,7 +3,7 @@ import logo from "../../images/logo-insta.png"
 
 export const Login = () => {
     return(
-        <div class="container">
+        <div class="login">
             <div class="login-container">
                 <img src={logo} alt="instagram logo" />
                 <form>

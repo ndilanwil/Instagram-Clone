@@ -45,3 +45,7 @@
     cursor: pointer;
     color : grey;
 }
+
+.post_comments {
+    margin-top: 10px;
+}
