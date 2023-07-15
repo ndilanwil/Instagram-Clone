@@ -8,14 +8,16 @@ import SendIcon from '@mui/icons-material/Send';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from "react-router-dom";
 
 export const Nav = () => {
+  const navigate = useNavigate();
   return (
     <div className='all'>
     <div className='nav'>
-      <img className='nav_logo' src='https://www.pngkey.com/png/full/828-8286178_mackeys-work-needs-no-elaborate-presentation-or-distracting.png' alt='instagram' />
+      <a href="/"><img className='nav_logo' src='https://www.pngkey.com/png/full/828-8286178_mackeys-work-needs-no-elaborate-presentation-or-distracting.png' alt='instagram' /></a>
       <div className='nav_buttons'>
-        <button className='side_button'>
+        <button onClick={() => navigate('/')} className='side_button'>
           <HomeIcon />
           <span>Home</span>
         </button>
@@ -52,9 +54,9 @@ export const Nav = () => {
       </div>
       
       <div className='side_more'>
-        <button className='side_button'>
+        <button onClick={() => navigate("/settings")} className='side_button'>
           <MenuIcon />
-          <span>More</span>
+          <span>Settings</span>
         </button>
       </div>
     </div>

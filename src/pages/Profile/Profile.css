@@ -6,3 +6,84 @@
 .profile_body {
     flex: 0.8;
 }
+
+.profile_header {
+    margin-left: 180px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 100px;
+}
+
+.profile_header_left {
+    display: flex;
+    flex-direction: column;
+    margin-left: 115px;
+}
+
+
+.profile_header_left_header {
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+.una {
+    margin-top: 1%;
+    margin-right: 35px;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile_header_left_header > button {
+    border: none;
+    border-radius: 8px;
+    position: relative;
+    text-align: center;
+    background-color: rgba(223, 223, 223, 0.507);
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    width: 100px;
+    height: 35px;
+}
+
+.profile_header_left_middle {
+    margin-bottom: 30px;
+    font-size: 17px;
+}
+
+.profile_header_left_middle > span {
+    margin-right: 50px;
+}
+
+.profile_posts {
+    margin-left: 20px;
+    width: 90%;
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(3, 1fr);
+} 
+
+.profile_posts img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.line {
+    width: 89.8%;
+    margin-left: 20px;
+    border: 0.5px solid white;
+}
+
+.publi {
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

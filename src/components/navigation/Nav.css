@@ -47,6 +47,10 @@
     font-weight: bolder;
     margin-left: 10px;
 }
+a{
+    color: white;
+    text-decoration: none;
+}
 
 .side_more {
     position: fixed;
