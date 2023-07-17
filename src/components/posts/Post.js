@@ -13,7 +13,7 @@ export const Post = (props) => {
         <div className="post_header">
             <div className="post_header_author">
                 <Avatar src={props.avatar} style={{marginRight: "10px"}}>
-                    UN
+                    {props.username}
                 </Avatar>{" "}
                 {props.username} • <span>&nbsp; {props.time}</span>
             </div> 
