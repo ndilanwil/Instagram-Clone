@@ -1,21 +1,90 @@
 import "./Post.css"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import {Avatar} from '@mui/material'
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline"
 import TelegramIcon from "@mui/icons-material/Telegram"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
+import { db } from "../../functions/firebase"
+import { collection, addDoc, doc, serverTimestamp, onSnapshot, updateDoc, increment  } from "firebase/firestore";
+import { useNavigate} from "react-router-dom";
 
 export const Post = (props) => {
+    const navigate = useNavigate()
+    const date = new Date(props.time); // Convert the string to a Date object
+    const now = new Date(); // Get the current date and time
+    const diffInMs = now.getTime() - date.getTime(); // Calculate the difference in milliseconds
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); // Convert to days and round down
+    const [active, setActive] = useState(false)
+    const [comment, setComment] = useState("");
+    const [comments, setComments] = useState([]);
+    const handleClick = async () => {
+        setActive(!active)
+        localStorage.setItem("active", !active)
+        if(localStorage.getItem("active")===true){
+            const docRef = doc(db, "posts", props.post);
+            try {
+              await updateDoc(docRef, {
+                likes: props.likes - 1,
+              });
+              console.log('Document updated successfully!');
+            } catch (error) {
+              console.error('Error updating document: ', error);
+            }
+        }
+        else {
+            const docRef = doc(db, "posts", props.post);
+            try {
+              await updateDoc(docRef, {
+                likes: props.likes + 1,
+              });
+              console.log('Document updated successfully!');
+            } catch (error) {
+              console.error('Error updating document: ', error);
+            }
+        }
+    };
+    const addComment = async (e) => {
+        e.preventDefault()
+        const myDocumentRef = doc(db, "posts", props.post);
+        const mySubcollectionRef = collection(myDocumentRef, "comments");
+        const newDocRef = await addDoc(mySubcollectionRef, { 
+            username: "Hurchil",
+            content: comment,
+            timestamp: serverTimestamp(),
+        });
+        console.log("New document added with ID: ", newDocRef.id);
+        setComment("")
+    };
+    const goProfile = async (e) => {
+        localStorage.setItem("profile", props.username)
+        navigate("/profile")
+    };
+
+    useEffect(() => {
+        const test = JSON.parse(localStorage.getItem('active'));
+        setActive(test)
+        const collectionRef = collection(doc(db, "posts", props.post), 'comments');
+        const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
+          const newData = querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id
+          }));
+          setComments(newData);
+        });
+    
+        return () => unsubscribe();
+      }, []);
+
   return (
     <div className="post">
         <div className="post_header">
-            <div className="post_header_author">
+            <div onClick={goProfile} className="post_header_author">
                 <Avatar src={props.avatar} style={{marginRight: "10px"}}>
                     {props.username}
                 </Avatar>{" "}
-                {props.username} • <span>&nbsp; {props.time}</span>
+                {props.username} • <span>&nbsp; {props.time}j</span>
             </div> 
             <MoreHorizIcon />
         </div>
@@ -25,7 +94,8 @@ export const Post = (props) => {
         <div className="post_footer">
             <div className="post_footer_icon">
                 <div className="post_icons_main">
-                    <FavoriteBorderIcon className="postIcon" />
+                    <FavoriteIcon onClick={handleClick}
+                        style={{ color: active ? "red" : "white" }} className="postIcon" />
                     <ChatBubbleOutlineIcon className="postIcon" />
                     <TelegramIcon className="postIcon" />
 
@@ -38,7 +108,17 @@ export const Post = (props) => {
         </div>
         <div className="post_comments">
             <strong>{props.username}</strong> {props.caption}
+            {
+                comments.map((comment) => 
+                     (<div><strong>{comment.username}</strong> {comment.content}</div>)
+                )
+            }
         </div>
+        <br/>   
+        <form className="post_form">
+            <input className="post_input" value={comment} type="text" placeholder="Add a comment" onChange={(e) => setComment(e.target.value)}/>
+            <button onClick={addComment} className="post_button" type='submit'>Add</button>
+        </form>
     </div>
   )
 }

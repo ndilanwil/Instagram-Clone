@@ -31,8 +31,8 @@ export const SignUp = () => {
     }
     
     return(
-        <div class="login">
-            <div class="login-container">
+        <div className="login">
+            <div className="login-container">
                 <img src={logo} alt="instagram logo" />
                 <form>
                     <input type='text' name='username' placeholder='Enter a username' onChange={(e)=> setUsername(e.target.value)}/>

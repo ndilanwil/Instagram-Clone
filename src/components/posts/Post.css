@@ -16,6 +16,7 @@
     flex-direction: row;
     align-items: center;
     font-weight: bolder;
+    cursor: pointer;
 }
 
 .post_header_author > span {
@@ -46,6 +47,29 @@
     color : grey;
 }
 
+.post_form {
+    display: flex;
+    justify-content: space-between;
+}
+
 .post_comments {
     margin-top: 10px;
+}
+
+.post_input {
+    background-color: black;
+    border: none;
+    border-bottom: 1px solid white;
+    flex: 1;
+    color: white;
+}
+.post_input:focus {
+    outline: none;
+}
+
+.post_button {
+    width: 50px;
+    background-color: blue;
+    border: none;
+    border-radius: 5px;
 }

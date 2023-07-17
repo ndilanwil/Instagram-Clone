@@ -7,6 +7,7 @@ import SlideshowIcon from '@mui/icons-material/Slideshow';
 import SendIcon from '@mui/icons-material/Send';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -21,7 +22,9 @@ export const Nav = () => {
   const toggleOverlay = () => {
     setOpen(!open);
   };
-  console.log(imageUrl)
+  const logout = () => {
+    navigate("/login")
+  };
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -74,6 +77,10 @@ export const Nav = () => {
           <AddCircleOutlineIcon />
           <span>Create</span>
         </button>
+        <button onClick={logout} className='side_button'>
+          <LogoutIcon />
+          <span>Logout</span>
+        </button>
 
       </div>
       
@@ -88,7 +95,7 @@ export const Nav = () => {
       <div className="addPost">
         <input type="file" id="file-input" onChange={handleImageChange}/>
         <label for="file-input" id="file">Select an Image</label>
-        {image && <div className='div'><img src={imageUrl} alt="image" /></div>}
+        {image && <div className='div'><img src={imageUrl} alt="imae" /></div>}
         <input type="text" placeholder="Add a caption" onChange={(e) => setCaption(e.target.value)}/>
         <button onClick={handleUpload} type="submit">Publish</button>
       </div>

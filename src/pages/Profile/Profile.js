@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Nav} from "../../components/navigation/Nav"
 import {Avatar} from '@mui/material'
 import GridOnIcon from '@mui/icons-material/GridOn';
-
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../functions/firebase";
 import "./Profile.css"
 
 export const Profile = () => {
+  const [name, setName] = useState("")
+  const [desc, setDesc] = useState("")
+  const [avatar, setAvatar] = useState("")
+  const [followers, setFollowers] = useState("")
+  const [follows, setFollows] = useState("")
+  useEffect( () => {
+    const name = localStorage.getItem("profile")
+    async function getData(){
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("username", "==", name));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setName(doc.data().username)
+        setDesc(doc.data().descripion)
+        setAvatar(doc.data().avatar)
+        setFollowers(doc.data().followers)
+        setFollows(doc.data().follows)
+        console.log(doc.id, " => ", doc.data());
+      });
+    }
+    getData()
+  }, []);
   return (
     <div className='profile'>
       <div className="side_nav">
@@ -13,25 +36,22 @@ export const Profile = () => {
       </div>
       <div className='profile_body'>
         <div className='profile_header'>
-          <Avatar style={{height: 168, width: 168, marginTop: "40px"}}>
-            UN
+          <Avatar src={avatar} style={{height: 168, width: 168, marginTop: "40px"}}>
+            {name}
           </Avatar>
           <div className='profile_header_left'>
               <div className='profile_header_left_header'>
-                  <div className="una">Otacustom</div>
+                  <div className="una">{name}</div>
                   <button>Follow</button>
                   <button>Contact</button>
               </div>
               <div className='profile_header_left_middle'>
                   <span><b>5</b> publications</span>
-                  <span><b>5</b> followers</span>
-                  <span><b>5</b> follows</span>
+                  <span><b>{followers}</b> followers</span>
+                  <span><b>{follows}</b> follows</span>
               </div>
               <div className='profile_header_left_footer'>
-                  This is the the description of my account<br/>
-                  It is beautifully designed<br />
-                  This is the the description of my account<br/>
-                  It is beautifully designed
+                  {desc}
               </div>
           </div>
         </div>

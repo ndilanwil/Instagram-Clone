@@ -5,11 +5,13 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
+    
     const navigate = useNavigate()
     const [users, setUsers] = useState([])
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     useEffect(() => {
+        localStorage.setItem("user", null);
         async function getData(){
             const result = await getAllUsers();
             setUsers(result)
@@ -18,21 +20,24 @@ export const Login = () => {
     }, []);
     const onSubmit = async (e) => {
         e.preventDefault()
-        users.map(user => {
-            console.log(user)
-            if (user.email === email && user.password === password){
+        for(let i=0;i<users.length;i++){
+            console.log(users[i].email)
+            console.log(users[i].password)
+            if (users[i].email === email && users[i].password === password){
+                localStorage.setItem('user', JSON.stringify(users[i]));
                 navigate("/")
+                break
             }
             else {
                 navigate("/signup")
             }
-        })
+        }
         
     }
 
     return(
-        <div class="login">
-            <div class="login-container">
+        <div className="login">
+            <div className="login-container">
                 <img src={logo} alt="instagram logo" />
                 <form>
                     <input type='email' name='email' placeholder='Enter your email' onChange={(e) => setEmail(e.target.value)} />
