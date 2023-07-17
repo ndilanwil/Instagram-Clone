@@ -3,12 +3,10 @@ import {Suggestion} from "../suggestion/Suggestion"
 import {Post} from "../posts/Post"
 import { useEffect, useState } from "react"
 import { fetchPost } from "../../functions/fetchPost"
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../functions/firebase"
 
 export const Timeline = () => {
   const [posts, setPosts] = useState([])
-  
+  const yeah = localStorage.getItem('yeah')
 
   useEffect(() => {
     async function getData(){
@@ -17,7 +15,7 @@ export const Timeline = () => {
     setPosts(result)
   }
      getData()
-  }, []);
+  }, [yeah]);
   return (
     <div className='timeline'>
       <div className='timeline_left'>

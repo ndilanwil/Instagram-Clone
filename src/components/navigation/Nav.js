@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./Nav.css"
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,9 +9,33 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from "react-router-dom";
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { addPost } from "../../functions/addPost"
 
 export const Nav = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false)
+  const [image, setImage] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [caption, setCaption] = useState('');
+  const toggleOverlay = () => {
+    setOpen(!open);
+  };
+  console.log(imageUrl)
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const imageUrl = URL.createObjectURL(e.target.files[0]);
+      setImageUrl(imageUrl);
+    }
+  };
+  const handleUpload = async (e) => {
+    const storageRef = ref(getStorage(), `${image.name}`);
+    await uploadBytes(storageRef, image);
+    getDownloadURL(storageRef).then((url) => addPost(e, caption, url))
+    setOpen(false)
+    localStorage.setItem("yeah", storageRef)
+  };
   return (
     <div className='all'>
     <div className='nav'>
@@ -46,7 +70,7 @@ export const Nav = () => {
           <span>Notifications</span>
         </button>
 
-        <button className='side_button'>
+        <button onClick={toggleOverlay} className='side_button'>
           <AddCircleOutlineIcon />
           <span>Create</span>
         </button>
@@ -60,6 +84,15 @@ export const Nav = () => {
         </button>
       </div>
     </div>
+    {open && 
+      <div className="addPost">
+        <input type="file" id="file-input" onChange={handleImageChange}/>
+        <label for="file-input" id="file">Select an Image</label>
+        {image && <div className='div'><img src={imageUrl} alt="image" /></div>}
+        <input type="text" placeholder="Add a caption" onChange={(e) => setCaption(e.target.value)}/>
+        <button onClick={handleUpload} type="submit">Publish</button>
+      </div>
+    }
     </div>
   )
 }

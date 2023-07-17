@@ -56,3 +56,77 @@ a{
     position: fixed;
      bottom: 3px;
 }
+
+.addPost {
+    background-color: rgb(255, 255, 255);
+    color: blue;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    height: 500px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.addPost > input[type="text"] {
+    border: 1px solid black;
+    color: black;
+    margin-top: 3%;
+    margin-bottom: 7%;
+    width: 400px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: transparent;
+    font-size: 21px;
+}
+.addPost > input[type="file"] {
+    border: 1px solid black;
+    color: black;
+    height: 100px;
+    display: none;
+}
+
+#file {
+    cursor: pointer;
+    border: 1px solid black;
+    width: 75%;
+    border-radius: 10px;
+    width: 400px;
+    height:50px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(129, 127, 127, 0.253);
+}
+
+.div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 400px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.459);
+    border-radius: 10px;
+}
+
+.div > img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 10px;
+
+}
+
+.addPost button {
+    background-color: blue;
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+}
