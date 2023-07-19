@@ -47,6 +47,7 @@
     font-weight: 700;
     width: 100px;
     height: 35px;
+    cursor: pointer;
 }
 
 .profile_header_left_middle {

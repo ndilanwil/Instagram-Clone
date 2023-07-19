@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import {Nav} from "../../components/navigation/Nav"
 import {Avatar} from '@mui/material'
 import GridOnIcon from '@mui/icons-material/GridOn';
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../../functions/firebase";
+import { db } from "../../functions/firebase"
+import { collection, addDoc, doc, onSnapshot, updateDoc, where, query, getDocs, deleteDoc  } from "firebase/firestore";
 import "./Profile.css"
 
 export const Profile = () => {
@@ -12,7 +12,106 @@ export const Profile = () => {
   const [avatar, setAvatar] = useState("")
   const [followers, setFollowers] = useState("")
   const [follows, setFollows] = useState("")
+  const [id, setId] = useState("")
+  const [te, setTest] = useState(false)
+  const [tes, setTeste] = useState()
+  const [posts, setPosts] = useState([])
+  const handleClick = async () => {
+    setTest(!te)
+    localStorage.setItem("te", !te)
+    };
+    const addFollow = async (e) => {
+      setTeste(!tes)
+      e.preventDefault()
+      async function checkIfDocumentExists() {
+        const q = query(
+          collection(db, "follows"),
+          where("who", "==", JSON.parse(localStorage.getItem('user')).id),
+          where("to", "==", id)
+        );
+        const querySnapshot = await getDocs(q);
+        return !querySnapshot.empty;
+      }
+      const docExist = await checkIfDocumentExists()
+      console.log(docExist)
+      setTeste(docExist)
+      if(docExist){
+        console.log("yesss")
+        const q = query(
+          collection(db, "follows"),
+          where("who", "==", JSON.parse(localStorage.getItem('user')).id),
+          where("to", "==", id),
+        );
+        const querySnapshot = await getDocs(q);
+      
+        querySnapshot.forEach((doc) => {
+          deleteDoc(doc.ref);
+        });
+    console.log(JSON.parse(localStorage.getItem('user')).follows)
+    const docRef = doc(db, "users", JSON.parse(localStorage.getItem('user')).id);
+      try {
+        await updateDoc(docRef, {
+          follows: JSON.parse(localStorage.getItem('user')).follows - 1,
+        });
+        const test = JSON.parse(localStorage.getItem('user'))
+        test.follows = JSON.parse(localStorage.getItem('user')).follows-1
+        localStorage.setItem("user", JSON.stringify(test))
+        console.log('Document updated successfully!');
+      } catch (error) {
+        console.error('Error updating document: ', error);
+    }
+    const docRf = doc(db, "users", id);
+      try {
+        await updateDoc(docRf, {
+          followers: followers-1,
+        });
+        const test = JSON.parse(localStorage.getItem('user'))
+        test.followers = followers-1
+        localStorage.setItem("user", JSON.stringify(test))
+        console.log('Document updated successfully!');
+      } catch (error) {
+        console.error('Error updating document: ', error);
+    }
+      }
+      else{
+        console.log("nooo")
+        const mySubcollectionRef = collection(db, "follows");
+    const newDocRef = await addDoc(mySubcollectionRef, { 
+        who: JSON.parse(localStorage.getItem('user')).id,
+        to: id  
+    });
+    console.log(JSON.parse(localStorage.getItem('user')).follows)
+    const docRef = doc(db, "users", JSON.parse(localStorage.getItem('user')).id);
+      try {
+        await updateDoc(docRef, {
+          follows: JSON.parse(localStorage.getItem('user')).follows + 1,
+        });
+        const test = JSON.parse(localStorage.getItem('user'))
+        test.follows = JSON.parse(localStorage.getItem('user')).follows+1
+        localStorage.setItem("user", JSON.stringify(test))
+        console.log('Document updated successfully!');
+      } catch (error) {
+        console.error('Error updating document: ', error);
+    }
+    const docRf = doc(db, "users", id);
+      try {
+        await updateDoc(docRf, {
+          followers: followers+1,
+        });
+        const test = JSON.parse(localStorage.getItem('user'))
+        test.followers = followers+1
+        localStorage.setItem("user", JSON.stringify(test))
+        console.log('Document updated successfully!');
+      } catch (error) {
+        console.error('Error updating document: ', error);
+    }
+    console.log("New document added with ID: ", newDocRef.id);
+    };
+      }
   useEffect( () => {
+    console.log(localStorage.getItem('te'))
+    const te = JSON.parse(localStorage.getItem('te'));
+    setTest(te)
     const name = localStorage.getItem("profile")
     async function getData(){
       const usersRef = collection(db, "users");
@@ -24,10 +123,35 @@ export const Profile = () => {
         setAvatar(doc.data().avatar)
         setFollowers(doc.data().followers)
         setFollows(doc.data().follows)
+        setId(doc.id)
         console.log(doc.id, " => ", doc.data());
       });
+      async function checkIfDocumentExists() {
+        const q = query(
+          collection(db, "follows"),
+          where("who", "==", JSON.parse(localStorage.getItem('user')).id),
+          where("to", "==", id)
+        );
+        const querySnapshot = await getDocs(q);
+        return !querySnapshot.empty;
+      }
+      const docExist = await checkIfDocumentExists()
+      console.log(docExist)
+      setTeste(docExist)
+      console.log(tes)
     }
     getData()
+  }, [tes]);
+  useEffect(() => {
+    const collectionRef = collection(db, 'posts');
+    const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
+      const newData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id
+      }));
+      setPosts(newData);
+    });
+    return () => unsubscribe();
   }, []);
   return (
     <div className='profile'>
@@ -42,7 +166,7 @@ export const Profile = () => {
           <div className='profile_header_left'>
               <div className='profile_header_left_header'>
                   <div className="una">{name}</div>
-                  <button>Follow</button>
+                  <button onClick={handleClick}>{tes ? <p onClick={addFollow}>Unfollow</p> : <p onClick={addFollow}>Follow</p>}</button>
                   <button>Contact</button>
               </div>
               <div className='profile_header_left_middle'>
@@ -61,11 +185,13 @@ export const Profile = () => {
           PUBLICATIONS
         </div>
         <div className='profile_posts'>
-          <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt="post" />
-          <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt="post" />
-          <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt="post" />
-          <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt="post" />
-          <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt="post" />
+        {
+            posts.map((post, key) => {
+              if(post.username === name){
+                return <img src={post.imageUrl} alt="post" />
+              }
+            })
+          }
         </div>
       </div>
     </div>

@@ -73,7 +73,7 @@ a{
     align-items: center;
 }
 
-.addPost > input[type="text"] {
+.addPost > input[type="text"], .searchUser > input {
     border: 1px solid black;
     color: black;
     margin-top: 3%;
@@ -84,7 +84,7 @@ a{
     background-color: transparent;
     font-size: 21px;
 }
-.addPost > input[type="file"] {
+.addPost > input[type="file"]{
     border: 1px solid black;
     color: black;
     height: 100px;
@@ -103,7 +103,7 @@ a{
     align-items: center;
     background-color: rgba(129, 127, 127, 0.253);
 }
-
+ 
 .div {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -130,3 +130,21 @@ a{
     border: none;
     border-radius: 10px;
 }
+
+.searchUser {
+    background-color: rgb(255, 255, 255);
+    color: blue;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    height: 500px;
+    border-radius: 10px;
+    align-items: center;
+    border: 3px solid blue;
+}
+
+ 

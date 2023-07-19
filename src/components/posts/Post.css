@@ -73,3 +73,10 @@
     border: none;
     border-radius: 5px;
 }
+
+.buttonEmoji {
+    background-color: black;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}

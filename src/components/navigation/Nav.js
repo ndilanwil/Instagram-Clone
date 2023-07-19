@@ -16,11 +16,16 @@ import { addPost } from "../../functions/addPost"
 export const Nav = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false)
+  const [search, setSearch] = useState(false)
+  const [toSearch, setToSearch] = useState("")
   const [image, setImage] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [caption, setCaption] = useState('');
   const toggleOverlay = () => {
     setOpen(!open);
+  };
+  const toggleSearch = () => {
+    setSearch(!search);
   };
   const logout = () => {
     navigate("/login")
@@ -49,7 +54,7 @@ export const Nav = () => {
           <span>Home</span>
         </button>
         
-        <button className='side_button'>
+        <button onClick={toggleSearch} className='side_button'>
           <SearchIcon />
           <span>Search</span>
         </button>
@@ -98,6 +103,11 @@ export const Nav = () => {
         {image && <div className='div'><img src={imageUrl} alt="imae" /></div>}
         <input type="text" placeholder="Add a caption" onChange={(e) => setCaption(e.target.value)}/>
         <button onClick={handleUpload} type="submit">Publish</button>
+      </div>
+    }
+    {search && 
+      <div className="searchUser">
+        <input type="text" placeholder="Search" onChange={(e) => setToSearch(e.target.value)}/>
       </div>
     }
     </div>

@@ -9,16 +9,19 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import { db } from "../../functions/firebase"
 import { collection, addDoc, doc, serverTimestamp, onSnapshot, updateDoc, increment  } from "firebase/firestore";
 import { useNavigate} from "react-router-dom";
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 export const Post = (props) => {
     const navigate = useNavigate()
-    const date = new Date(props.time); // Convert the string to a Date object
-    const now = new Date(); // Get the current date and time
-    const diffInMs = now.getTime() - date.getTime(); // Calculate the difference in milliseconds
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); // Convert to days and round down
+    const [showPicker, setShowPicker] = useState(false);
     const [active, setActive] = useState(false)
+    const [da, setDa] = useState("")
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
+    const handleEmojiClick = (emoji) => {
+        setComment(comment + emoji.native);
+      };
     const handleClick = async () => {
         setActive(!active)
         localStorage.setItem("active", !active)
@@ -63,6 +66,17 @@ export const Post = (props) => {
     };
 
     useEffect(() => {
+        console.log(showPicker)
+        const date = new Date(props.time); // Convert the string to a Date object
+        const now = new Date(); // Get the current date and time
+        const diffInMs = now.getTime() - date.getTime(); // Calculate the difference in milliseconds
+        const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); // Convert to days and round down
+        console.log(diffInDays)
+        if(isNaN(diffInDays)){
+            setDa(0)
+        }else{
+            setDa(diffInDays)
+        }
         const test = JSON.parse(localStorage.getItem('active'));
         setActive(test)
         const collectionRef = collection(doc(db, "posts", props.post), 'comments');
@@ -84,7 +98,7 @@ export const Post = (props) => {
                 <Avatar src={props.avatar} style={{marginRight: "10px"}}>
                     {props.username}
                 </Avatar>{" "}
-                {props.username} • <span>&nbsp; {props.time}j</span>
+                {props.username} • <span>&nbsp; {da}j</span>
             </div> 
             <MoreHorizIcon />
         </div>
@@ -117,7 +131,10 @@ export const Post = (props) => {
         <br/>   
         <form className="post_form">
             <input className="post_input" value={comment} type="text" placeholder="Add a comment" onChange={(e) => setComment(e.target.value)}/>
-            <button onClick={addComment} className="post_button" type='submit'>Add</button>
+            <button className='buttonEmoji' onClick={(e) => {e.preventDefault();console.log(showPicker); setShowPicker(!showPicker);
+                console.log(showPicker)}}>😀</button>
+                      {showPicker && <Picker data={data} onEmojiSelect={handleEmojiClick} />}
+            <button onClick={addComment} className="post_button" type='submit' style={{display: "none"}}>Add</button>
         </form>
     </div>
   )
