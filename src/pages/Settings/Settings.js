@@ -3,11 +3,14 @@ import {Nav} from "../../components/navigation/Nav"
 import { useState, useEffect } from 'react';
 import { db } from "../../functions/firebase"
 import {  doc, updateDoc  } from "firebase/firestore";
+import Alert from '@mui/material/Alert';
 
 export const Settings = () => {
   const [name, setName] = useState("")
   const [desc, setDesc] = useState("")
   const [password, setPassword] = useState("")
+  const [alert, setAlert] = useState(false)
+  const [alert2, setAlert2] = useState(false)
   const [newP, setNew] = useState("")
   const handleClick = async (e) => {
     e.preventDefault()
@@ -55,6 +58,10 @@ export const Settings = () => {
           test.password = newP
           localStorage.setItem("user", JSON.stringify(test))
       }
+      setAlert(true)
+    }
+    else {
+      setAlert2(true)
     }
     }
   useEffect(() => {
@@ -69,6 +76,16 @@ export const Settings = () => {
       </div>
       <div className='settings_body'>
           <h1>Settings</h1>
+          {alert &&
+                <Alert variant="filled" severity="success" onClose={() => {setAlert(false)}}>
+                    User Informations updated successfully
+                </Alert>
+            }
+          {alert2 &&
+                <Alert variant="filled" severity="error" onClose={() => {setAlert(false)}}>
+                    You have entered a wrong password
+                </Alert>
+            }
           <div className='settings_form'>
               <form className='f'>
                 <label>

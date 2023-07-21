@@ -8,6 +8,7 @@ import "./Profile.css"
 
 export const Profile = () => {
   const [name, setName] = useState("")
+  const [publi, setPubli] = useState("")
   const [desc, setDesc] = useState("")
   const [avatar, setAvatar] = useState("")
   const [followers, setFollowers] = useState("")
@@ -18,7 +19,7 @@ export const Profile = () => {
   const [posts, setPosts] = useState([])
   const handleClick = async () => {
     setTest(!te)
-    localStorage.setItem("te", !te)
+    localStorage.setItem("doFollow", !te)
     };
     const addFollow = async (e) => {
       setTeste(!tes)
@@ -109,8 +110,8 @@ export const Profile = () => {
     };
       }
   useEffect( () => {
-    console.log(localStorage.getItem('te'))
-    const te = JSON.parse(localStorage.getItem('te'));
+    console.log(localStorage.getItem('doFollow'))
+    const te = JSON.parse(localStorage.getItem('doFollow'));
     setTest(te)
     const name = localStorage.getItem("profile")
     async function getData(){
@@ -141,17 +142,20 @@ export const Profile = () => {
       console.log(tes)
     }
     getData()
-  }, [tes]);
+  }, [tes])
   useEffect(() => {
-    const collectionRef = collection(db, 'posts');
-    const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
-      const newData = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id
-      }));
-      setPosts(newData);
-    });
-    return () => unsubscribe();
+      const collectionRef = collection(db, 'posts');
+      const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
+        const newData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id
+        }));
+        const userPosts = newData.filter(post => post.username === localStorage.getItem("profile"));
+        const postCount = userPosts.length; 
+        setPubli(postCount);
+        setPosts(newData);
+      });
+      return () => unsubscribe();
   }, []);
   return (
     <div className='profile'>
@@ -170,7 +174,7 @@ export const Profile = () => {
                   <button>Contact</button>
               </div>
               <div className='profile_header_left_middle'>
-                  <span><b>5</b> publications</span>
+                  <span><b>{publi}</b> publications</span>
                   <span><b>{followers}</b> followers</span>
                   <span><b>{follows}</b> follows</span>
               </div>

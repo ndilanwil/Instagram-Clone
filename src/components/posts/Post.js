@@ -7,7 +7,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline"
 import TelegramIcon from "@mui/icons-material/Telegram"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import { db } from "../../functions/firebase"
-import { collection, addDoc, doc, serverTimestamp, onSnapshot, updateDoc, increment  } from "firebase/firestore";
+import { collection, addDoc, doc, serverTimestamp, onSnapshot, updateDoc  } from "firebase/firestore";
 import { useNavigate} from "react-router-dom";
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
@@ -53,7 +53,7 @@ export const Post = (props) => {
         const myDocumentRef = doc(db, "posts", props.post);
         const mySubcollectionRef = collection(myDocumentRef, "comments");
         const newDocRef = await addDoc(mySubcollectionRef, { 
-            username: "Hurchil",
+            username: JSON.parse(localStorage.getItem("user")).username,
             content: comment,
             timestamp: serverTimestamp(),
         });
@@ -66,12 +66,10 @@ export const Post = (props) => {
     };
 
     useEffect(() => {
-        console.log(showPicker)
         const date = new Date(props.time); // Convert the string to a Date object
         const now = new Date(); // Get the current date and time
         const diffInMs = now.getTime() - date.getTime(); // Calculate the difference in milliseconds
         const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); // Convert to days and round down
-        console.log(diffInDays)
         if(isNaN(diffInDays)){
             setDa(0)
         }else{

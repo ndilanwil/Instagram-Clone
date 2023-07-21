@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./Nav.css"
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,12 +12,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { addPost } from "../../functions/addPost"
+import { getAllUsers } from "../../functions/getAllUsers"
 
 export const Nav = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState(false)
   const [toSearch, setToSearch] = useState("")
+  const [users, setUsers] = useState([])
+  const [temp, setTemp] = useState([])
   const [image, setImage] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [caption, setCaption] = useState('');
@@ -44,6 +47,28 @@ export const Nav = () => {
     setOpen(false)
     localStorage.setItem("yeah", storageRef)
   };
+
+  const filteredNames = users.filter((name) =>
+    name.toLowerCase().startsWith(toSearch.toLowerCase())
+  );
+
+  const goProfile = async (name) => {
+    localStorage.setItem("profile", name)
+    navigate("/profile")
+  };
+
+  useEffect(() => {
+    async function getData(){
+        const result = await getAllUsers();
+        setTemp(result)
+    }
+    getData()
+    let array = []
+    temp.map(user => {
+      array.push(user.username)
+    })
+    setUsers(array)
+  }, [search]);
   return (
     <div className='all'>
     <div className='nav'>
@@ -99,7 +124,7 @@ export const Nav = () => {
     {open && 
       <div className="addPost">
         <input type="file" id="file-input" onChange={handleImageChange}/>
-        <label for="file-input" id="file">Select an Image</label>
+        <label htmlFor="file-input" id="file">Select an Image</label>
         {image && <div className='div'><img src={imageUrl} alt="imae" /></div>}
         <input type="text" placeholder="Add a caption" onChange={(e) => setCaption(e.target.value)}/>
         <button onClick={handleUpload} type="submit">Publish</button>
@@ -108,6 +133,11 @@ export const Nav = () => {
     {search && 
       <div className="searchUser">
         <input type="text" placeholder="Search" onChange={(e) => setToSearch(e.target.value)}/>
+        <ul>
+          {filteredNames.map((name) => (
+            <li key={name}><span onClick={() => goProfile(name)}>{name}</span></li>
+          ))} 
+        </ul>
       </div>
     }
     </div>

@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Avatar } from '@mui/material'
 import "./Suggestion.css"
+import { useNavigate} from "react-router-dom";
 
-export const Suggestion = () => {
+export const Suggestion = (props) => {
+  const navigate = useNavigate()
+
+  const goProfile = async (e) => {
+    console.log(props.name)
+    localStorage.setItem("profile", props.name)
+    navigate("/profile")
+  };
   return (
     <div className="suggestions">
       <div className="suggestions__usernames">
@@ -12,11 +20,11 @@ export const Suggestion = () => {
               <Avatar>D</Avatar>
             </span>
             <div className="username__info">
-              <span className="username">Dilan</span>
+              <span className="username">{props.name}</span>
               <span className="relation">New to Instagram</span>
             </div>
           </div>
-          <button className="follow__button">Follow</button>
+          <button onClick={goProfile} className="follow__button">See profile</button>
         </div>
       </div>
     </div>

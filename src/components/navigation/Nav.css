@@ -143,8 +143,20 @@ a{
     width: 550px;
     height: 500px;
     border-radius: 10px;
-    align-items: center;
     border: 3px solid blue;
+}
+
+.searchUser > input {
+    margin-left: 65px;
+}
+.searchUser > ul > li {
+    font-size: 21px;
+    font-weight: 700;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-bottom: 1px solid black;
 }
 
  

@@ -3,6 +3,7 @@ import logo from "../../images/logo-insta.png"
 import { getAllUsers } from "../../functions/getAllUsers"
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Alert from '@mui/material/Alert';
 
 export const Login = () => {
     
@@ -10,6 +11,7 @@ export const Login = () => {
     const [users, setUsers] = useState([])
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [alert, setAlert] = useState(false)
     useEffect(() => {
         localStorage.setItem("user", null);
         async function getData(){
@@ -25,11 +27,21 @@ export const Login = () => {
             console.log(users[i].password)
             if (users[i].email === email && users[i].password === password){
                 localStorage.setItem('user', JSON.stringify(users[i]));
+                console.log(localStorage.getItem('user'))
+                const user = JSON.parse(localStorage.getItem('user'));
+                // Check if the user item exists
+                if (user) {
+                // Use the user data
+                console.log(user.email);
+                } else {
+                // Handle the case where the user item does not exist
+                console.log('User item not found in localStorage');
+                }
                 navigate("/")
                 break
             }
             else {
-                navigate("/signup")
+                setAlert(true)
             }
         }
         
@@ -38,6 +50,11 @@ export const Login = () => {
     return(
         <div className="login">
             <div className="login-container">
+                {alert &&
+                    <Alert variant="filled" severity="error" onClose={() => {setAlert(false)}}>
+                        Wrong Username or password. Please check your inputs
+                    </Alert>
+                }
                 <img src={logo} alt="instagram logo" />
                 <form>
                     <input type='email' name='email' placeholder='Enter your email' onChange={(e) => setEmail(e.target.value)} />

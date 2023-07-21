@@ -4,9 +4,13 @@ import {Post} from "../posts/Post"
 import { useEffect, useState } from "react"
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../functions/firebase';
+import { getAllUsers } from "../../functions/getAllUsers"
 
 export const Timeline = () => {
   const [posts, setPosts] = useState([])
+  const [users, setUsers] = useState([])
+
+  
 
   useEffect(() => {
     const collectionRef = collection(db, 'posts');
@@ -17,8 +21,15 @@ export const Timeline = () => {
       }));
       setPosts(newData);
     });
-
+    console.log(users)
     return () => unsubscribe();
+  }, []);
+  useEffect(() => {
+    async function getData(){
+        const result = await getAllUsers();
+        setUsers(result)
+    }
+    getData()
   }, []);
   return (
     <div className='timeline'>
@@ -41,10 +52,9 @@ export const Timeline = () => {
       </div>
       <div className='timeline_right'>
       <div className="suggestions__title">Suggestions for you</div>
-        <Suggestion />
-        <Suggestion />
-        <Suggestion />
-        <Suggestion />
+          {users.map(user => {
+            return <Suggestion name={user.username}/>
+          })}
       </div>
     </div>
   )

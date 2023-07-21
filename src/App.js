@@ -10,6 +10,7 @@ import {Profile} from "./pages/Profile/Profile"
 function App() {
   const [authed, setAuthed] = useState(true);
   useEffect(() => {
+    console.log(localStorage.getItem('user'))
     let test = localStorage.getItem("user");
     console.log(test);
     if(test===null){
